@@ -1,0 +1,21 @@
+.mainContainer {
+  display: flex;
+}
+
+.statsContainer {
+  flex: 3;
+  height: 60vh;
+  /* border: 1px solid; */
+  padding: 10px;
+  padding-left: 2vw;
+}
+
+.widgetContainer {
+  display: flex;
+  gap: 2vw;
+  justify-content: space-between;
+}
+
+.empListContainer {
+  flex: 1;
+}

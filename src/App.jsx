@@ -1,37 +1,38 @@
-import { auth } from './firebase/init'
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from 'firebase/auth'
-import { useState } from 'react'
+// import { auth } from './firebase/init'
+// import {
+//   createUserWithEmailAndPassword,
+//   signInWithEmailAndPassword,
+//   signOut,
+// } from 'firebase/auth'
+// import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Login from './pages/Login'
+import Home from './pages/home/Home'
+import EmployeeList from './pages/employees/EmployeeList'
+import EditEmployee from './pages/employees/EditEmployee'
+import CreateEmployee from './pages/employees/CreateEmployee'
 
 const App = () => {
-  const [loading, setLoading] = useState(false)
-  const [user, setUser] = useState({})
-  const registerUser = () => {
-    createUserWithEmailAndPassword(auth, 'admin@demo.com', 'test123')
-      .then(({ user }) => console.log(user))
-      .catch((err) => console.log(err))
-  }
-  const loginUser = () => {
-    setLoading(true)
-    // console.log('login')
-    signInWithEmailAndPassword(auth, 'admin@demo.com', 'test123')
-      .then(({ user }) => setUser(user))
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false))
-  }
-  const logoutUser = () => {
-    signOut(auth)
-    setUser(null)
-  }
   return (
-    <div>
-      <button onClick={registerUser}>Register</button>
-      <button onClick={loginUser}>Login</button>
-      <button onClick={logoutUser}>Logout</button>
-      {loading ? 'loading...' : user?.email}
+    <div className="container">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/">
+            <Route index element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="employees">
+              <Route index element={<EmployeeList />} />
+              <Route path=":employeeId" element={<EditEmployee />} />
+              <Route path="new" element={<CreateEmployee />} />
+            </Route>
+            <Route path="projects">
+              <Route index element={<EmployeeList />} />
+              <Route path=":projectId" element={<EditEmployee />} />
+              <Route path="new" element={<CreateEmployee />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   )
 }
