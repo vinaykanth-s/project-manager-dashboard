@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { IconButton, MenuItem, Tooltip, Avatar } from '@mui/material'
+import { Link, NavLink } from 'react-router-dom'
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 const Navbar = () => {
@@ -14,6 +15,36 @@ const Navbar = () => {
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Hours
+          </Typography>
+          <Typography component="div" sx={{ flexGrow: 1, fontSize: '1em' }}>
+            <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>
+              Dashboard
+            </Link>
+          </Typography>
+
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, fontSize: '1em' }}
+          >
+            <Link
+              to="/projects"
+              style={{ color: '#fff', textDecoration: 'none' }}
+            >
+              Projects
+            </Link>
+          </Typography>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, fontSize: '1em' }}
+          >
+            <Link
+              to="/employees"
+              style={{ color: '#fff', textDecoration: 'none' }}
+            >
+              Team
+            </Link>
           </Typography>
           <Button
             title="logged in as vinay@vk.com"

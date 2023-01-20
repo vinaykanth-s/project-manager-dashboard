@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -13,20 +13,18 @@ import { useTheme } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../firebase/init'
-// import { useSelector, useDispatch } from 'react-redux'
-// import { saveActiveUser } from '../redux/slices/userSlice'
+import { AuthContext } from '../context/AuthContext'
+
 export default function Login() {
   const theme = useTheme()
   const navigate = useNavigate()
-  // const dispatch = useDispatch()
-  const [user, setUser] = useState('')
-  // const user = useSelector((state) => state.user.userEmail)
   const [loading, setLoading] = useState(false)
 
+  const { dispatch } = useContext(AuthContext)
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user)
+        dispatch({ type: 'LOGIN', payload: user })
       }
     })
   }, [auth])
@@ -37,8 +35,7 @@ export default function Login() {
     console.log({ email, password })
     signInWithEmailAndPassword(auth, 'admin@demo.com', 'test123')
       .then(({ user }) => {
-        // const user = user
-        setUser(user)
+        dispatch({ type: 'LOGIN', payload: user })
         console.log('Singed in user: ', user)
         navigate('/')
       })

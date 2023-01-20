@@ -8,27 +8,88 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/home/Home'
-import EmployeeList from './pages/employees/EmployeeList'
-import EditEmployee from './pages/employees/EditEmployee'
-import CreateEmployee from './pages/employees/CreateEmployee'
-
+import EmployeeList from './pages/employees/list/EmployeeList'
+import EditEmployee from './pages/employees/single/EmployeeData'
+import CreateEmployee from './pages/employees/create/CreateEmployee'
+import { productInputs, userInputs } from './formSource'
+import { useContext } from 'react'
+import { AuthContext } from './context/AuthContext'
 const App = () => {
+  const { currentUser } = useContext(AuthContext)
+  const RequireAuth = ({ children }) => {
+    return currentUser ? children : <Navigate to="/login" />
+  }
+
+  console.log({ currentUser })
+
   return (
     <div className="container">
       <BrowserRouter>
         <Routes>
           <Route path="/">
-            <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
+            <Route
+              index
+              element={
+                <RequireAuth>
+                  <Home />
+                </RequireAuth>
+              }
+            />
             <Route path="employees">
-              <Route index element={<EmployeeList />} />
-              <Route path=":employeeId" element={<EditEmployee />} />
-              <Route path="new" element={<CreateEmployee />} />
+              <Route
+                index
+                element={
+                  <RequireAuth>
+                    <EmployeeList />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path=":employeeId"
+                element={
+                  <RequireAuth>
+                    <EditEmployee />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="new"
+                element={
+                  <RequireAuth>
+                    <CreateEmployee
+                      inputs={userInputs}
+                      title="Add New Employee"
+                    />
+                  </RequireAuth>
+                }
+              />
             </Route>
             <Route path="projects">
-              <Route index element={<EmployeeList />} />
-              <Route path=":projectId" element={<EditEmployee />} />
-              <Route path="new" element={<CreateEmployee />} />
+              <Route
+                index
+                element={
+                  <RequireAuth>
+                    <EmployeeList />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path=":projectId"
+                element={
+                  <RequireAuth>
+                    <EditEmployee />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="new"
+                element={
+                  <RequireAuth>
+                    <CreateEmployee />
+                  </RequireAuth>
+                }
+              />
             </Route>
           </Route>
         </Routes>

@@ -1,13 +1,32 @@
 import './statsWidget.css'
-import WindowIcon from '@mui/icons-material/Window'
+import { Paper } from '@mui/material'
 
-const StatsWidget = () => {
+const StatsWidget = ({ data }) => {
   return (
-    <div className="widget">
-      <WindowIcon sx={{ fontSize: '2em', color: '#00DCCD' }} />
-      <div className="count">5</div>
-      <div className="stat_label">Total Projects</div>
-    </div>
+    <Paper
+      elevation={5}
+      className="widget"
+      style={{ background: data.type === 'Delayed' && '#fd7f8e' }}
+    >
+      <data.icon
+        sx={{
+          fontSize: '2em',
+          color: data.type === 'Delayed' ? '#f00' : '#00DCCD',
+        }}
+      />
+      <div
+        className="count"
+        style={{ color: data.type === 'Delayed' && '#fff' }}
+      >
+        {data.count}
+      </div>
+      <div
+        className="stat_label"
+        style={{ color: data.type === 'Delayed' && '#fff' }}
+      >
+        {data.type}
+      </div>
+    </Paper>
   )
 }
 

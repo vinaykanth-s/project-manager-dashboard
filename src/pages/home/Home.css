@@ -1,5 +1,6 @@
 .mainContainer {
   display: flex;
+  /* border: 1px solid; */
 }
 
 .statsContainer {
@@ -18,4 +19,13 @@
 
 .empListContainer {
   flex: 1;
+}
+
+.chartsContainer {
+  display: flex;
+}
+
+.budgetStatusContainer {
+  display: flex;
+  gap: 5px;
 }
