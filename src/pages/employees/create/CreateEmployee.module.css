@@ -34,7 +34,8 @@ form {
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
-  justify-content: space-around;
+  justify-content: space-between !important;
+  padding-left: 15px;
 }
 
 .formInput {
@@ -52,6 +53,10 @@ button {
   margin-top: 10px;
 }
 
+button:disabled {
+  background-color: rgb(96, 119, 119);
+  cursor: not-allowed;
+}
 label {
   display: flex;
   align-items: center;

@@ -1,18 +1,90 @@
-import './CreateEmployee.css'
+import styles from './CreateProject.module.css'
 import Navbar from '../../../components/Navbar'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined'
+import { auth, db, storage } from '../../../firebase/init'
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage'
+import { doc, serverTimestamp, collection, addDoc } from 'firebase/firestore'
 
-const CreateEmployee = ({ inputs, title }) => {
+import { useNavigate } from 'react-router-dom'
+
+const CreateProject = ({ inputs, title }) => {
+  const navigate = useNavigate()
   const [file, setFile] = useState('')
+  const [data, setData] = useState({})
+  const [progressPercentage, setProgressPercentage] = useState(null)
+
+  useEffect(() => {
+    const uploadFile = () => {
+      const name = new Date().getTime() + file.name
+      const storageRef = ref(storage, name)
+      const uploadTask = uploadBytesResumable(storageRef, file)
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          console.log('Upload is ' + progress + '% done')
+          setProgressPercentage(progress)
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused')
+              break
+            case 'running':
+              console.log('Upload is running')
+              break
+            default:
+              return
+          }
+        },
+        (error) => {
+          console.log(error)
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setData((prev) => ({ ...prev, img: downloadURL }))
+          })
+        }
+      )
+    }
+    file && uploadFile()
+  }, [file])
+
+  const handleInput = (e) => {
+    const id = e.target.id
+    const value = e.target.value
+
+    setData({ ...data, [id]: value })
+  }
+
+  // console.log(data)
+
+  const handleAdd = async (e) => {
+    e.preventDefault()
+    // console.log({ project: data })
+    try {
+      // console.log({ data })
+      // console.log({ data })
+      await addDoc(collection(db, 'projects'), data)
+      navigate(-1)
+    } catch (err) {
+      console.log({ err })
+    }
+  }
   return (
-    <div className="newContainer">
+    <div className={styles.newContainer}>
       <Navbar />
-      <div className="top">
+      <div className={styles.top}>
         <h1>{title}</h1>
       </div>
-      <div className="bottom">
-        <div className="left">
+      <div className={styles.bottom}>
+        <div className={styles.left}>
           <img
             src={
               file
@@ -22,11 +94,11 @@ const CreateEmployee = ({ inputs, title }) => {
             alt=""
           />
         </div>
-        <div className="right">
-          <form>
-            <div className="formInput">
+        <div className={styles.right}>
+          <form className={styles.newProjectForm} onSubmit={handleAdd}>
+            <div className={styles.formInput}>
               <label htmlFor="file">
-                Image: <DriveFolderUploadOutlinedIcon className="icon" />
+                Image: <DriveFolderUploadOutlinedIcon className={styles.icon} />
               </label>
               <input
                 type="file"
@@ -37,9 +109,14 @@ const CreateEmployee = ({ inputs, title }) => {
             </div>
 
             {inputs.map((input) => (
-              <div className="formInput" key={input.id}>
+              <div className={styles.formInput} key={input.id}>
                 <label>{input.label}</label>
-                <input type={input.type} placeholder={input.placeholder} />
+                <input
+                  id={input.id}
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  onChange={handleInput}
+                />
               </div>
             ))}
             <button>Send</button>
@@ -50,4 +127,4 @@ const CreateEmployee = ({ inputs, title }) => {
   )
 }
 
-export default CreateEmployee
+export default CreateProject

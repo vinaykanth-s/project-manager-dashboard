@@ -1,0 +1,9 @@
+.labelContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.budgetStatusContainer {
+  display: flex;
+  gap: 5px;
+}

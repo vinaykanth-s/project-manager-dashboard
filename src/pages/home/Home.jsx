@@ -10,9 +10,9 @@ import {
 } from '@mui/icons-material'
 import TeamMood from '../../components/teamMood/TeamMood'
 import TotalRevenue from '../../components/TotalRevenue/TotalRevenue'
-import Budget from '../../components/budget/Budget'
+import Budget from '../../components/budgetChart/Budget'
 import { Typography } from '@mui/material'
-import ProjectBudgetStatus from '../../components/projectBudgetStatus/ProjectBudgetStatus'
+import BudgetStatus from '../../components/budgetStatus/BudgetStatus'
 const widgets = [
   {
     icon: Window,
@@ -41,20 +41,6 @@ const widgets = [
   },
 ]
 
-const projects = [
-  {
-    name: 'Insurance App',
-    totalBudget: 70_000,
-    actualHrs: 1000,
-    soldHrs: 100,
-  },
-  {
-    name: 'Neo',
-    totalBudget: 70_000,
-    actualHrs: 1000,
-    soldHrs: 100,
-  },
-]
 const Home = () => {
   return (
     <div>
@@ -75,16 +61,8 @@ const Home = () => {
           <TeamMood />
         </section>
       </div>
-      <div>
-        <Typography component="div" variant="h6">
-          Budget Status
-        </Typography>
-        <div className="budgetStatusContainer">
-          {projects.map((project, index) => (
-            <ProjectBudgetStatus data={project} />
-          ))}
-        </div>
-      </div>
+
+      {/* <BudgetStatus /> */}
     </div>
   )
 }

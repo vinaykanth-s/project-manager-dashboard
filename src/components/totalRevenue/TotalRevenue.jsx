@@ -5,7 +5,7 @@ import HighchartsReact from 'highcharts-react-official'
 const TotalRevenue = () => {
   const options = {
     chart: {
-      height: 230,
+      height: 400,
     },
     title: {
       text: 'Total Revenue',

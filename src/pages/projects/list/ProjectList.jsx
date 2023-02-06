@@ -1,128 +1,121 @@
-import './EmployeeList.css'
+import './ProjectList.css'
+import { useState, useEffect } from 'react'
 import Navbar from '../../../components/Navbar'
 import { DataGrid } from '@mui/x-data-grid'
 import { Link } from 'react-router-dom'
+import { Button } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import { onSnapshot, collection, deleteDoc, doc } from 'firebase/firestore'
+import { db } from '../../../firebase/init'
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 150 },
   {
-    field: 'fullName',
-    headerName: 'Full name',
-    // description: 'This column has a value getter and is not sortable.',
-    // sortable: false,
-    width: 250,
-    // valueGetter: (params) =>
-    //   `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-  },
-  {
-    field: 'role',
-    headerName: 'Role',
-    // type: 'number',
-    width: 250,
-  },
-  {
-    field: 'costPerHr',
-    headerName: 'Cost Per Hour',
+    field: 'projectName',
+    headerName: 'Project Name',
     width: 200,
   },
   {
-    field: 'assignedHrs',
-    headerName: 'Assigned Hours',
+    field: 'budget',
+    headerName: 'Budget(₹)',
+    width: 150,
+  },
+  {
+    field: 'allottedHrs',
+    headerName: 'Allotted Hours',
+    width: 150,
+  },
+  {
+    field: 'workedHrs',
+    headerName: 'Worked Hours',
+    width: 150,
+  },
+  {
+    field: 'deadline',
+    headerName: 'Project Deadline',
     width: 200,
-  },
-]
-
-const actionColumn = [
-  {
-    field: 'action',
-    headerName: 'Action',
-    width: 200,
-    renderCell: (params) => {
-      return (
-        <div className="cellAction">
-          <Link to="/employees/1" style={{ textDecoration: 'none' }}>
-            <div className="viewButton">View</div>
-          </Link>
-          <div
-            className="deleteButton"
-            // onClick={() => handleDelete(params.row.id)}
-          >
-            Delete
-          </div>
-        </div>
-      )
-    },
-  },
-]
-const rows = [
-  {
-    id: 1,
-    fullName: 'Snow Jon',
-    age: 35,
-    role: 'Software Developer',
-  },
-  {
-    id: 2,
-    fullName: 'Lannister Cersei',
-    age: 42,
-    role: 'Software Developer',
-  },
-  {
-    id: 3,
-    fullName: 'Lannister Jaime',
-    age: 45,
-    role: 'Software Developer',
-  },
-  {
-    id: 4,
-    fullName: 'Stark Arya',
-    age: 16,
-    role: 'Software Developer',
-  },
-  {
-    id: 5,
-    fullName: 'Targaryen Daenerys',
-    age: null,
-    role: 'Software Developer',
-  },
-  {
-    id: 6,
-    fullName: 'Melisandre',
-    age: 150,
-    role: 'Software Developer',
-  },
-  {
-    id: 7,
-    fullName: 'Clifford Ferrara',
-    age: 44,
-    role: 'Software Developer',
-  },
-  {
-    id: 8,
-    fullName: 'Frances Rossini',
-    age: 36,
-    role: 'Software Developer',
-  },
-  {
-    id: 9,
-    fullName: 'Roxie Harvey',
-    age: 65,
-    role: 'Software Developer',
   },
 ]
 
 const ProjectList = () => {
+  const [data, setData] = useState([])
+
+  const actionColumn = [
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div className="cellAction">
+            {/* <Link to="/employees/1" style={{ textDecoration: 'none' }}>
+              <div className="viewButton">View</div>
+            </Link> */}
+            <div
+              className="deleteButton"
+              onClick={() => handleDelete(params.row.id)}
+            >
+              Delete
+            </div>
+          </div>
+        )
+      },
+    },
+  ]
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, 'projects', id))
+      setData(data.filter((item) => item.id !== id))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    const fetchRealTimeData = onSnapshot(
+      collection(db, 'projects'),
+      (snapShot) => {
+        let list = []
+        snapShot.docs.forEach((doc) => {
+          list.push({ id: doc.id, ...doc.data() })
+        })
+        setData(list)
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
+
+    return () => {
+      fetchRealTimeData()
+    }
+  }, [])
+
   return (
     <div>
       <Navbar />
-      <div className="topBar">Back</div>
+      <div className="topBar">
+        <Link to="/projects/new" style={{ textDecoration: 'none' }}>
+          <Button variant="outlined" startIcon={<AddIcon />}>
+            Add New
+          </Button>
+        </Link>
+      </div>
       <div style={{ height: '80vh', width: '100%', padding: 20 }}>
         <DataGrid
-          rows={rows}
+          rows={data}
           columns={columns.concat(actionColumn)}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          // checkboxSelection
+          pageSize={9}
+          rowsPerPageOptions={[9]}
+          sx={{
+            boxShadow: 2,
+            border: 2,
+            // borderColor: 'primary.light',
+            '& .MuiDataGrid-cell:hover': {
+              color: 'primary.main',
+            },
+          }}
         />
       </div>
     </div>

@@ -8,7 +8,7 @@ const Budget = () => {
       // plotBackgroundColor: null,
       // plotBorderWidth: 0,
       // plotShadow: false,
-      height: 230,
+      height: 420,
       width: 330,
     },
     title: {
@@ -17,6 +17,7 @@ const Budget = () => {
       verticalAlign: 'middle',
       y: 60,
     },
+    credits: { enabled: false },
     tooltip: {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
     },

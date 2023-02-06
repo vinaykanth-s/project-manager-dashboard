@@ -1,21 +1,39 @@
 import './TeamMood.css'
 import { Avatar, Paper, Typography } from '@mui/material'
-const empList = [
-  { name: 'Andrea', role: 'Software Developer' },
-  { name: 'Alvaro', role: 'Software Developer' },
-  { name: 'Julan', role: 'Software Developer' },
-  { name: 'Jose', role: 'Software Developer' },
-  { name: 'Rose', role: 'Software Developer' },
-]
+import { useState, useEffect } from 'react'
+import { collection, onSnapshot } from 'firebase/firestore'
+import { db } from '../../firebase/init'
+
 const TeamMood = () => {
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    const fetchRealTimeData = onSnapshot(
+      collection(db, 'employees'),
+      (snapShot) => {
+        let list = []
+        snapShot.docs.forEach((doc) => {
+          list.push({ id: doc.id, ...doc.data() })
+        })
+        setData(list)
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
+
+    return () => {
+      fetchRealTimeData()
+    }
+  }, [])
   return (
     <Paper className="teamMoodContainer" elevation={5}>
-      {empList.map((emp) => (
+      {data?.map((emp) => (
         <div className="empCard">
-          <Avatar alt={emp.name} />
+          <Avatar alt={emp.empName} src={emp.img} />
           <div>
-            <Typography>{emp.name}</Typography>
-            <Typography>{emp.role}</Typography>
+            <Typography>{emp.empName}</Typography>
+            <Typography className="role">{emp.role}</Typography>
           </div>
         </div>
       ))}

@@ -18,3 +18,21 @@
   border: 1px dotted rgba(220, 20, 60, 0.6);
   cursor: pointer;
 }
+
+.topBar {
+  text-align: right;
+  padding: 20px 20px 0px 0px;
+}
+
+.cellWithImg {
+  display: flex;
+  align-items: center;
+}
+
+.cellImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}

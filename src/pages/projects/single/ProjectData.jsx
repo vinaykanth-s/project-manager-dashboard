@@ -1,7 +1,7 @@
 import Navbar from '../../../components/Navbar'
-import './EmployeeData.css'
+import './ProjectData.css'
 
-const EmployeeData = () => {
+const ProjectData = () => {
   return (
     <div>
       <Navbar />
@@ -46,4 +46,4 @@ const EmployeeData = () => {
   )
 }
 
-export default EmployeeData
+export default ProjectData

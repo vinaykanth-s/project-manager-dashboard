@@ -1,19 +1,15 @@
-// import { auth } from './firebase/init'
-// import {
-//   createUserWithEmailAndPassword,
-//   signInWithEmailAndPassword,
-//   signOut,
-// } from 'firebase/auth'
-// import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/home/Home'
 import EmployeeList from './pages/employees/list/EmployeeList'
-import EditEmployee from './pages/employees/single/EmployeeData'
+import EmployeeData from './pages/employees/single/EmployeeData'
 import CreateEmployee from './pages/employees/create/CreateEmployee'
-import { productInputs, userInputs } from './formSource'
+import { projectInputs, userInputs } from './formSource'
 import { useContext } from 'react'
 import { AuthContext } from './context/AuthContext'
+import ProjectList from './pages/projects/list/ProjectList'
+import CreateProject from './pages/projects/create/CreateProject'
+import ProjectData from './pages/projects/single/ProjectData'
 const App = () => {
   const { currentUser } = useContext(AuthContext)
   const RequireAuth = ({ children }) => {
@@ -49,7 +45,7 @@ const App = () => {
                 path=":employeeId"
                 element={
                   <RequireAuth>
-                    <EditEmployee />
+                    <EmployeeData />
                   </RequireAuth>
                 }
               />
@@ -70,7 +66,7 @@ const App = () => {
                 index
                 element={
                   <RequireAuth>
-                    <EmployeeList />
+                    <ProjectList />
                   </RequireAuth>
                 }
               />
@@ -78,7 +74,7 @@ const App = () => {
                 path=":projectId"
                 element={
                   <RequireAuth>
-                    <EditEmployee />
+                    <ProjectData />
                   </RequireAuth>
                 }
               />
@@ -86,7 +82,10 @@ const App = () => {
                 path="new"
                 element={
                   <RequireAuth>
-                    <CreateEmployee />
+                    <CreateProject
+                      inputs={projectInputs}
+                      title="Add New Project"
+                    />
                   </RequireAuth>
                 }
               />
