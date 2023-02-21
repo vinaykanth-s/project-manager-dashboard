@@ -1,4 +1,5 @@
 import './Home.css'
+import { useState, useEffect } from 'react'
 import Navbar from '../../components/Navbar'
 import StatsWidget from '../../components/statsWidget/StatsWidget'
 import {
@@ -11,8 +12,11 @@ import {
 import TeamMood from '../../components/teamMood/TeamMood'
 import TotalRevenue from '../../components/TotalRevenue/TotalRevenue'
 import Budget from '../../components/budgetChart/Budget'
-import { Typography } from '@mui/material'
-import BudgetStatus from '../../components/budgetStatus/BudgetStatus'
+import { db } from '../../firebase/init'
+import { onSnapshot, collection, deleteDoc, doc } from 'firebase/firestore'
+
+// import { Typography } from '@mui/material'
+// import BudgetStatus from '../../components/budgetStatus/BudgetStatus'
 const widgets = [
   {
     icon: Window,
@@ -42,6 +46,79 @@ const widgets = [
 ]
 
 const Home = () => {
+  const [data, setData] = useState([])
+  const [chartOptions, setChartOptions] = useState('')
+
+  const constructProjectsChart = (chartData) => {
+    console.log({ chartData })
+    const projects = chartData?.map((ele) => ele.projectName)
+    const allottedHrs = chartData?.map((ele) => +ele.allottedHrs)
+    const workedHrs = chartData?.map((ele) => +ele.workedHrs)
+    let options = {
+      chart: {
+        type: 'column',
+      },
+      title: {
+        text: 'Projects Time Allotment Overview',
+      },
+      xAxis: {
+        categories: projects,
+        crosshair: true,
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Hours ( Hrs )',
+        },
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat:
+          '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y:.1f} Hrs</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true,
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+        },
+      },
+      series: [
+        {
+          name: 'Allotted Hours',
+          data: allottedHrs,
+        },
+        {
+          name: 'Worked Hours',
+          data: workedHrs,
+        },
+      ],
+    }
+    setChartOptions(options)
+  }
+  useEffect(() => {
+    const fetchRealTimeData = onSnapshot(
+      collection(db, 'projects'),
+      (snapShot) => {
+        let list = []
+        snapShot.docs.forEach((doc) => {
+          list.push({ id: doc.id, ...doc.data() })
+        })
+        setData(list)
+        constructProjectsChart(list)
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
+
+    return () => {
+      fetchRealTimeData()
+    }
+  }, [])
   return (
     <div>
       <Navbar />
@@ -53,7 +130,7 @@ const Home = () => {
             ))}
           </div>
           <div className="chartsContainer">
-            <TotalRevenue />
+            <TotalRevenue chartOptions={chartOptions} />
             <Budget />
           </div>
         </section>

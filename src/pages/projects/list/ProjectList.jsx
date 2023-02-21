@@ -39,6 +39,7 @@ const columns = [
 
 const ProjectList = () => {
   const [data, setData] = useState([])
+  // const params = 
 
   const actionColumn = [
     {
@@ -48,9 +49,9 @@ const ProjectList = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/* <Link to="/employees/1" style={{ textDecoration: 'none' }}>
-              <div className="viewButton">View</div>
-            </Link> */}
+            <Link to="/projects/1" style={{ textDecoration: 'none' }}>
+              <div className="viewButton">Edit</div>
+            </Link>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
@@ -111,7 +112,6 @@ const ProjectList = () => {
           sx={{
             boxShadow: 2,
             border: 2,
-            // borderColor: 'primary.light',
             '& .MuiDataGrid-cell:hover': {
               color: 'primary.main',
             },

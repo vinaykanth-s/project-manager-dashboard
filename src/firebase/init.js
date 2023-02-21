@@ -4,7 +4,7 @@ import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_REACT_APP_FIREBASE_KEY,
+  apiKey: 'AIzaSyAanGyOpFEhYnNoMZL5PqBP86rA7GWvPNI',
   authDomain: 'project-manager-dashboard.firebaseapp.com',
   projectId: 'project-manager-dashboard',
   storageBucket: 'project-manager-dashboard.appspot.com',

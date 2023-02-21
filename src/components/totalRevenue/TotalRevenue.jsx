@@ -2,7 +2,8 @@ import './TotalRevenue.css'
 import * as Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
-const TotalRevenue = () => {
+const TotalRevenue = (props) => {
+  const { chartOptions } = props
   const options = {
     chart: {
       height: 400,
@@ -67,7 +68,7 @@ const TotalRevenue = () => {
   }
   return (
     <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   )
 }
