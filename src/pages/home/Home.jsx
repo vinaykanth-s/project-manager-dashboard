@@ -10,7 +10,7 @@ import {
   TaskAlt,
 } from '@mui/icons-material'
 import TeamMood from '../../components/teamMood/TeamMood'
-import TotalRevenue from '../../components/TotalRevenue/TotalRevenue'
+import TotalRevenue from '../../components/totalRevenue/TotalRevenue'
 import Budget from '../../components/budgetChart/Budget'
 import { db } from '../../firebase/init'
 import { onSnapshot, collection, deleteDoc, doc } from 'firebase/firestore'
@@ -131,7 +131,8 @@ const Home = () => {
           </div>
           <div className="chartsContainer">
             <TotalRevenue chartOptions={chartOptions} />
-            <Budget />
+
+            {/* <Budget /> */}
           </div>
         </section>
         <section className="empListContainer">
